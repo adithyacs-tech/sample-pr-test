@@ -1,23 +1,21 @@
 pipeline {
     agent any
+
     stages {
         stage('Build') {
             steps {
                 echo 'Building...'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
+                // your actual build/test steps here
             }
         }
     }
+
     post {
         success {
-            echo 'Build succeeded!'
+            githubNotify context: 'CI/Jenkins', status: 'SUCCESS', description: 'Build succeeded'
         }
         failure {
-            echo 'Build failed!'
+            githubNotify context: 'CI/Jenkins', status: 'FAILURE', description: 'Build failed'
         }
     }
 }
