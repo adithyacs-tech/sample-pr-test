@@ -1,14 +1,15 @@
 pipeline {
     agent any
 
+    // Restrict pipeline execution only to PRs targeting "main"
+    when {
+        expression {
+            return env.CHANGE_ID && env.CHANGE_TARGET == 'main'
+        }
+    }
+
     stages {
         stage('PR Details') {
-            when {
-                expression {
-                    // Run only if it's a PR and target branch is "main"
-                    return env.CHANGE_TARGET == 'main'
-                }
-            }
             steps {
                 script {
                     echo "Pull Request ID: ${env.CHANGE_ID ?: 'Not a PR'}"
@@ -20,11 +21,6 @@ pipeline {
         }
 
         stage('Build') {
-            when {
-                expression {
-                    return env.CHANGE_TARGET == 'main'
-                }
-            }
             steps {
                 echo 'Building...'
             }
