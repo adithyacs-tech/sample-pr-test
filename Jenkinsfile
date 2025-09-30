@@ -3,6 +3,12 @@ pipeline {
 
     stages {
         stage('PR Details') {
+            when {
+                expression {
+                    // Run only if it's a PR and target branch is "main"
+                    return env.CHANGE_TARGET == 'main'
+                }
+            }
             steps {
                 script {
                     echo "Pull Request ID: ${env.CHANGE_ID ?: 'Not a PR'}"
@@ -14,19 +20,23 @@ pipeline {
         }
 
         stage('Build') {
+            when {
+                expression {
+                    return env.CHANGE_TARGET == 'main'
+                }
+            }
             steps {
                 echo 'Building...'
-                // your actual build/test steps here
             }
         }
     }
 
     post {
         success {
-            githubNotify context: 'CI/Jenkins', status: 'SUCCESS', description: 'Build got succeeded'
+            githubNotify context: 'CI/Jenkins', status: 'SUCCESS', description: 'Build succeeded'
         }
         failure {
-            githubNotify context: 'CI/Jenkins', status: 'FAILURE', description: 'Build got failed'
+            githubNotify context: 'CI/Jenkins', status: 'FAILURE', description: 'Build failed'
         }
     }
 }
