@@ -23,10 +23,10 @@ pipeline {
 
     post {
         success {
-            githubNotify context: 'CI/Jenkins', status: 'SUCCESS', description: 'Build succeeded'
+            githubNotify context: 'CI/Jenkins', status: 'SUCCESS', description: 'Build got succeeded'
         }
         failure {
-            githubNotify context: 'CI/Jenkins', status: 'FAILURE', description: 'Build failed'
+            githubNotify context: 'CI/Jenkins', status: 'FAILURE', description: 'Build got failed'
         }
     }
 }
